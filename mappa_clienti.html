@@ -2,140 +2,98 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SM Hub — Maxi Impianti Napoli</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SM Hub - Maxi Impianti Napoli</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:Arial,sans-serif;background:#f0f0f0}
-  #header{background:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.10);position:relative;z-index:1000;height:60px}
-  .header-left{display:flex;align-items:center;gap:12px}
-  #header img{height:36px}
-  #header h1{font-size:15px;font-weight:700;color:#222}
-  #header h1 span{color:#e84c1e}
-  #counter{font-size:12px;background:#fff5f2;border:1px solid #f5c4b3;border-radius:20px;padding:5px 14px;color:#e84c1e;font-weight:700}
-  #map{height:calc(100vh - 60px);width:100%}
-  .popup-box{min-width:240px;font-family:Arial,sans-serif;padding:2px}
-  .popup-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-  .popup-cimasa{background:#e84c1e;color:#fff;font-size:13px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:.06em;flex-shrink:0}
-  .popup-dim{font-size:12px;color:#e84c1e;background:#fff5f2;border:1px solid #f5c4b3;padding:3px 8px;border-radius:3px;font-weight:600}
-  .popup-addr{font-size:12px;color:#444;line-height:1.5;border-top:1px solid #f0f0f0;padding-top:8px}
-  .popup-foto{width:100%;height:140px;border-radius:6px;margin-top:8px;object-fit:cover;display:block}
-  .popup-nofoto{width:100%;height:80px;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:11px;margin-top:8px;border:1px dashed #ddd;gap:6px}
-  .smhub-marker{background:#fff;border:2.5px solid #e84c1e;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.25);overflow:hidden}
-  .smhub-marker img{width:28px;height:28px;object-fit:contain}
-  #sidebar{position:fixed;top:60px;left:0;z-index:999;background:#fff;width:290px;height:calc(100vh - 60px);overflow-y:auto;box-shadow:3px 0 12px rgba(0,0,0,.10);transform:translateX(-290px);transition:transform .28s ease}
-  #sidebar.open{transform:translateX(0)}
-  #sidebar-header{padding:12px 16px;background:#fff;border-bottom:2px solid #e84c1e;font-size:13px;font-weight:700;color:#222;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1}
-  #search-box{padding:10px 12px;background:#fafafa;border-bottom:1px solid #eee;position:sticky;top:41px;z-index:1}
-  #search-input{width:100%;border:1px solid #e0e0e0;border-radius:20px;padding:7px 14px;font-size:12px;outline:none;background:#fff}
-  #search-input:focus{border-color:#e84c1e}
-  #list-count{font-size:11px;color:#aaa;padding:6px 16px 2px}
-  .imp-item{padding:10px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s}
-  .imp-item:hover{background:#fff5f2;border-left:3px solid #e84c1e;padding-left:13px}
-  .imp-cimasa{font-size:12px;font-weight:700;color:#e84c1e}
-  .imp-addr{font-size:11px;color:#666;margin-top:2px;line-height:1.35}
-  .imp-dim{font-size:11px;color:#bbb;margin-top:2px}
-  #btn-list{position:fixed;top:72px;left:12px;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.10);color:#333;display:flex;align-items:center;gap:6px}
-  #btn-list:hover{background:#f5f5f5}
-  #btn-close-sidebar{background:none;border:none;font-size:16px;cursor:pointer;color:#aaa}
-  #btn-close-sidebar:hover{color:#e84c1e}
-  .leaflet-popup-content-wrapper{border-radius:10px!important;box-shadow:0 4px 16px rgba(0,0,0,.15)!important}
-  .leaflet-popup-content{margin:14px 16px!important}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif}
+#header{background:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,.12);z-index:1000;position:relative;height:58px}
+.hl{display:flex;align-items:center;gap:10px}
+#header img{height:34px}
+#header h1{font-size:14px;font-weight:700;color:#222}
+#header h1 span{color:#e84c1e}
+#cnt-badge{font-size:12px;background:#fff5f2;border:1px solid #f5c4b3;border-radius:20px;padding:4px 12px;color:#e84c1e;font-weight:700}
+#map{height:calc(100vh - 58px);width:100%}
+.pm{min-width:220px;font-family:Arial,sans-serif}
+.ph{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.pc{background:#e84c1e;color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:4px}
+.pd{font-size:11px;color:#e84c1e;background:#fff5f2;border:1px solid #f5c4b3;padding:2px 7px;border-radius:3px}
+.pa{font-size:12px;color:#444;border-top:1px solid #eee;padding-top:6px;line-height:1.4}
+.pf{width:100%;height:130px;border-radius:5px;margin-top:7px;object-fit:cover}
+.pn{width:100%;height:60px;background:#f5f5f5;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:11px;margin-top:7px;border:1px dashed #ddd}
+.mk{background:#fff;border:2.5px solid #e84c1e;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 7px rgba(0,0,0,.25);overflow:hidden}
+.mk img{width:26px;height:26px;object-fit:contain}
+#sb{position:fixed;top:58px;left:0;z-index:999;background:#fff;width:280px;height:calc(100vh - 58px);overflow-y:auto;box-shadow:3px 0 10px rgba(0,0,0,.1);transform:translateX(-280px);transition:transform .25s}
+#sb.open{transform:translateX(0)}
+#sbh{padding:11px 14px;border-bottom:2px solid #e84c1e;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+#sbh button{background:none;border:none;font-size:15px;cursor:pointer;color:#aaa}
+#srch{padding:9px 11px;background:#fafafa;border-bottom:1px solid #eee;position:sticky;top:41px;z-index:1}
+#srch input{width:100%;border:1px solid #ddd;border-radius:20px;padding:6px 12px;font-size:12px;outline:none}
+#srch input:focus{border-color:#e84c1e}
+#lcnt{font-size:11px;color:#aaa;padding:5px 14px 2px}
+.li{padding:9px 14px;border-bottom:1px solid #f5f5f5;cursor:pointer}
+.li:hover{background:#fff5f2;border-left:3px solid #e84c1e;padding-left:11px}
+.lc{font-size:12px;font-weight:700;color:#e84c1e}
+.la{font-size:11px;color:#666;margin-top:1px;line-height:1.3}
+.ld{font-size:11px;color:#bbb;margin-top:1px}
+#btnl{position:fixed;top:68px;left:10px;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:7px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.1);color:#333}
+#btnl:hover{background:#f5f5f5}
 </style>
 </head>
 <body>
 <div id="header">
-  <div class="header-left">
-    <img src="data:image/png;base64,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" alt="SM Hub">
-    <h1>Maxi Impianti — <span>Napoli</span></h1>
-  </div>
-  <div id="counter"><span id="cnt">0</span> impianti</div>
+<div class="hl">
+<img src="data:image/png;base64,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" alt="SM Hub">
+<h1>Maxi Impianti &mdash; <span>Napoli</span></h1>
+</div>
+<div id="cnt-badge"><span id="cnt">35</span> impianti</div>
 </div>
 <div id="map"></div>
-<div id="sidebar">
-  <div id="sidebar-header">
-    Tutti gli impianti
-    <button id="btn-close-sidebar" onclick="toggleSidebar()">✕</button>
-  </div>
-  <div id="search-box">
-    <input id="search-input" type="text" placeholder="Cerca cimasa o indirizzo…" oninput="filterList(this.value)">
-  </div>
-  <div id="list-count"></div>
-  <div id="list-items"></div>
+<div id="sb">
+<div id="sbh">Tutti gli impianti <button onclick="tgSb()">&#x2715;</button></div>
+<div id="srch"><input type="text" placeholder="Cerca cimasa o indirizzo..." oninput="fl(this.value)"></div>
+<div id="lcnt"></div>
+<div id="li"></div>
 </div>
-<button id="btn-list" onclick="toggleSidebar()">☰&nbsp; Lista impianti</button>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<button id="btnl" onclick="tgSb()">&#9776; Lista</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-const LOGO = "data:image/png;base64,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";
-const BASE_FOTO = "https://ropagnozzi.github.io/mappe-smhub/img/foto/";
-const IMPIANTI = [{"cimasa": "N/D", "indirizzo": "VIA TASSO 114 DIR.VOMERO", "lat": 40.8374037, "lng": 14.2264429, "dimensione": "10x12"}, {"cimasa": "NA04", "indirizzo": "STAZIONE EAV P.ZZA GARIBALDI banchina treni binario 4", "lat": 40.8529176, "lng": 14.272529, "dimensione": "12x3"}, {"cimasa": "NA05", "indirizzo": "STAZIONE EAV P.ZZA GARIBALDI banchina treni binario 1", "lat": 40.8530043, "lng": 14.2730587, "dimensione": "12x3"}, {"cimasa": "NA63", "indirizzo": "VIA MARINA DIREZIONE CENTRO- REGGIA DI PORTICI ANG.GIANTURCO", "lat": 40.8434707, "lng": 14.285129, "dimensione": "7x10"}, {"cimasa": "NA65", "indirizzo": "VIA MARINA ALTEZZA INGRESSO AUTOSTRADE", "lat": 40.8432079, "lng": 14.2857851, "dimensione": "7x10"}, {"cimasa": "NA64", "indirizzo": "VIA PIETRO J.DE GENNARO DIR.VIA LEPANTO STADIO MARADONA", "lat": 40.8288336, "lng": 14.1962536, "dimensione": "6x6"}, {"cimasa": "NA66", "indirizzo": "CORSO ARNALDO LUCCI DIREZ.PIAZZA GARIBALDI", "lat": 40.8479045, "lng": 14.2763135, "dimensione": "7x10"}, {"cimasa": "NA68", "indirizzo": "VIA LUIGI VOLPICELLA 413 dir CERCOLA e Paesi Vesuviani", "lat": 40.8483073, "lng": 14.3235664, "dimensione": "7x10"}, {"cimasa": "NA69", "indirizzo": "VIA EPOMEO  ROTATORIA DIR.SOCCAVO", "lat": 40.8476009, "lng": 14.1913539, "dimensione": "4x9"}, {"cimasa": "NA67", "indirizzo": "VIA TERRACINA stadio Maradona  alt incr  BARBAGALLO dir. AGNANO", "lat": 40.8238497, "lng": 14.1774396, "dimensione": "7x10"}, {"cimasa": "NA72", "indirizzo": "VIA PIETRO JACOPO DE GENNARO  ALT.INCR.VIA CARITEO stadio Maradona", "lat": 40.8285001, "lng": 14.1973064, "dimensione": "7x7"}, {"cimasa": "NA80", "indirizzo": "VIA DIOCLEZIANO ALT.INC.PIAZZALE TECCHIO DIR.CENTRO", "lat": 40.8227712, "lng": 14.1930718, "dimensione": "5x10"}, {"cimasa": "NA81", "indirizzo": "VIALE JF KENNEDY 425  DIR. CENTRO PALAPARTENOPE MOSTRA", "lat": 40.819075, "lng": 14.177719, "dimensione": "7x10"}, {"cimasa": "NA83", "indirizzo": "VIA GABRIELE JANNELLI 304 A MT.80 INC.VIA FRAGNITO", "lat": 40.8590047, "lng": 14.2166811, "dimensione": "8x6"}, {"cimasa": "NA86", "indirizzo": "VIA DI MIANO 167 ALT.INC.DON LUIGI GUANELLA", "lat": 40.8900494, "lng": 14.2517168, "dimensione": "5x10"}, {"cimasa": "NA88", "indirizzo": "VIA LEPANTO 33 ANG.VIA VENIERO FUORIGROTTA STADIO", "lat": 40.8273596, "lng": 14.1986482, "dimensione": "5x10"}, {"cimasa": "NA90", "indirizzo": "VIA EMILIO SCAGLIONE 188", "lat": 40.8829448, "lng": 14.2310994, "dimensione": "7x10"}, {"cimasa": "NA89", "indirizzo": "VIA FORIA 106", "lat": 40.8576935, "lng": 14.2597536, "dimensione": "5x8"}, {"cimasa": "NA87", "indirizzo": "VIA SANTA MARIA A CUBITO 530", "lat": 40.8909184, "lng": 14.2226047, "dimensione": "8x12"}, {"cimasa": "NA92", "indirizzo": "VIALE DELLA LIBERAZIONE 73 DIR.BAGNOLI", "lat": 40.8206792, "lng": 14.1708516, "dimensione": "7x9"}, {"cimasa": "NA93", "indirizzo": "VIA STADERA 138 DIR.CENTRO", "lat": 40.8749357, "lng": 14.3059782, "dimensione": "6x6"}, {"cimasa": "NA91", "indirizzo": "VIA EMANUELE GIANTURCO 55 A 50 MT ROTATORIA VIA FERRARIS", "lat": 40.8484328, "lng": 14.2885877, "dimensione": "6x8"}, {"cimasa": "NA30", "indirizzo": "VIA NUOVA AGNANO ANGOLO VIALE KENNEDY", "lat": 40.8193127, "lng": 14.1751098, "dimensione": "7x10"}, {"cimasa": "NA40", "indirizzo": "VIALE J.F.KENNEDY ANG.VIA NUOVA AGNANO DIR.AGNANO/BAGNOLI", "lat": 40.819765, "lng": 14.175772, "dimensione": "8x12"}, {"cimasa": "NA84", "indirizzo": "VIA GIUSEPPE ORSI 15 DIR.INC.VIA GIACINTO GIGANTE", "lat": 40.8526786, "lng": 14.2332942, "dimensione": "7x10"}, {"cimasa": "NA85", "indirizzo": "VIA GIUSEPPE ORSI 15 USCITA TANG ARENELLA", "lat": 40.8530371, "lng": 14.2334583, "dimensione": "8x4"}, {"cimasa": "NA82", "indirizzo": "VIA TASSO 114 DIR.VOMERO", "lat": 40.8374037, "lng": 14.2264429, "dimensione": "4x9"}, {"cimasa": "NA95", "indirizzo": "VIA EDGARDO CORTESE ANG.STASI PIAZZA MUZII", "lat": 40.8523986, "lng": 14.2299017, "dimensione": "5x10"}, {"cimasa": "NA70", "indirizzo": "VIA DIOCLEZIANO 567  DIR. CENTRO", "lat": 40.8178021, "lng": 14.1783744, "dimensione": "5x9"}, {"cimasa": "NA71", "indirizzo": "Via ANTONINO PIO dir.Soccavo", "lat": 40.843441, "lng": 14.2019451, "dimensione": "10x0,8"}, {"cimasa": "NA20", "indirizzo": "Via ANTONINO PIO dir.Fuorigrotta", "lat": 40.8438871, "lng": 14.2020504, "dimensione": "10x0,8"}, {"cimasa": "NA73", "indirizzo": "Via SERVIO TULLIO dir.Fuorigrotta", "lat": 40.8444218, "lng": 14.1988655, "dimensione": "10x0,8"}, {"cimasa": "NA74", "indirizzo": "Via SERVIO TULLIO dir. Soccavo", "lat": 40.8439042, "lng": 14.198721, "dimensione": "10x0,8"}, {"cimasa": "NA75", "indirizzo": "Via Emanuele Gianturco dir.Ferraris", "lat": 40.846431, "lng": 14.2873164, "dimensione": "9x1,5"}, {"cimasa": "NA76", "indirizzo": "Via Galileo Ferraris dir.S.Giovanni", "lat": 40.8494763, "lng": 14.2840144, "dimensione": "9x1,5"}];
-let markers = [], map;
-
-function popupHtml(imp) {
-  const nid = "nd-" + imp.cimasa;
-  const fid = "fi-" + imp.cimasa;
-  return '<div class="popup-box">'
-    + '<div class="popup-header">'
-    + '<div class="popup-cimasa">' + imp.cimasa + '</div>'
-    + '<div class="popup-dim">&#128210; ' + imp.dimensione + '</div>'
-    + '</div>'
-    + '<div class="popup-addr">' + imp.indirizzo + '</div>'
-    + '<img id="' + fid + '" class="popup-foto" src="' + BASE_FOTO + imp.cimasa + '.jpg"'
-    + ' onerror="this.style.display='none';document.getElementById('' + nid + '').style.display='flex'">'
-    + '<div id="' + nid + '" class="popup-nofoto" style="display:none">&#128247; Foto non disponibile</div>'
-    + '</div>';
+var LG="data:image/png;base64,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";
+var BF="https://ropagnozzi.github.io/mappe-smhub/img/foto/";
+var IMP=[{"cimasa": "ND", "indirizzo": "VIA TASSO 114 DIR.VOMERO", "lat": 40.8374037, "lng": 14.2264429, "dimensione": "10x12"}, {"cimasa": "NA04", "indirizzo": "STAZIONE EAV P.ZZA GARIBALDI banchina treni binario 4", "lat": 40.8529176, "lng": 14.272529, "dimensione": "12x3"}, {"cimasa": "NA05", "indirizzo": "STAZIONE EAV P.ZZA GARIBALDI banchina treni binario 1", "lat": 40.8530043, "lng": 14.2730587, "dimensione": "12x3"}, {"cimasa": "NA63", "indirizzo": "VIA MARINA DIREZIONE CENTRO- REGGIA DI PORTICI ANG.GIANTURCO", "lat": 40.8434707, "lng": 14.285129, "dimensione": "7x10"}, {"cimasa": "NA65", "indirizzo": "VIA MARINA ALTEZZA INGRESSO AUTOSTRADE", "lat": 40.8432079, "lng": 14.2857851, "dimensione": "7x10"}, {"cimasa": "NA64", "indirizzo": "VIA PIETRO J.DE GENNARO DIR.VIA LEPANTO STADIO MARADONA", "lat": 40.8288336, "lng": 14.1962536, "dimensione": "6x6"}, {"cimasa": "NA66", "indirizzo": "CORSO ARNALDO LUCCI DIREZ.PIAZZA GARIBALDI", "lat": 40.8479045, "lng": 14.2763135, "dimensione": "7x10"}, {"cimasa": "NA68", "indirizzo": "VIA LUIGI VOLPICELLA 413 dir CERCOLA e Paesi Vesuviani", "lat": 40.8483073, "lng": 14.3235664, "dimensione": "7x10"}, {"cimasa": "NA69", "indirizzo": "VIA EPOMEO  ROTATORIA DIR.SOCCAVO", "lat": 40.8476009, "lng": 14.1913539, "dimensione": "4x9"}, {"cimasa": "NA67", "indirizzo": "VIA TERRACINA stadio Maradona  alt incr  BARBAGALLO dir. AGNANO", "lat": 40.8238497, "lng": 14.1774396, "dimensione": "7x10"}, {"cimasa": "NA72", "indirizzo": "VIA PIETRO JACOPO DE GENNARO  ALT.INCR.VIA CARITEO stadio Maradona", "lat": 40.8285001, "lng": 14.1973064, "dimensione": "7x7"}, {"cimasa": "NA80", "indirizzo": "VIA DIOCLEZIANO ALT.INC.PIAZZALE TECCHIO DIR.CENTRO", "lat": 40.8227712, "lng": 14.1930718, "dimensione": "5x10"}, {"cimasa": "NA81", "indirizzo": "VIALE JF KENNEDY 425  DIR. CENTRO PALAPARTENOPE MOSTRA", "lat": 40.819075, "lng": 14.177719, "dimensione": "7x10"}, {"cimasa": "NA83", "indirizzo": "VIA GABRIELE JANNELLI 304 A MT.80 INC.VIA FRAGNITO", "lat": 40.8590047, "lng": 14.2166811, "dimensione": "8x6"}, {"cimasa": "NA86", "indirizzo": "VIA DI MIANO 167 ALT.INC.DON LUIGI GUANELLA", "lat": 40.8900494, "lng": 14.2517168, "dimensione": "5x10"}, {"cimasa": "NA88", "indirizzo": "VIA LEPANTO 33 ANG.VIA VENIERO FUORIGROTTA STADIO", "lat": 40.8273596, "lng": 14.1986482, "dimensione": "5x10"}, {"cimasa": "NA90", "indirizzo": "VIA EMILIO SCAGLIONE 188", "lat": 40.8829448, "lng": 14.2310994, "dimensione": "7x10"}, {"cimasa": "NA89", "indirizzo": "VIA FORIA 106", "lat": 40.8576935, "lng": 14.2597536, "dimensione": "5x8"}, {"cimasa": "NA87", "indirizzo": "VIA SANTA MARIA A CUBITO 530", "lat": 40.8909184, "lng": 14.2226047, "dimensione": "8x12"}, {"cimasa": "NA92", "indirizzo": "VIALE DELLA LIBERAZIONE 73 DIR.BAGNOLI", "lat": 40.8206792, "lng": 14.1708516, "dimensione": "7x9"}, {"cimasa": "NA93", "indirizzo": "VIA STADERA 138 DIR.CENTRO", "lat": 40.8749357, "lng": 14.3059782, "dimensione": "6x6"}, {"cimasa": "NA91", "indirizzo": "VIA EMANUELE GIANTURCO 55 A 50 MT ROTATORIA VIA FERRARIS", "lat": 40.8484328, "lng": 14.2885877, "dimensione": "6x8"}, {"cimasa": "NA30", "indirizzo": "VIA NUOVA AGNANO ANGOLO VIALE KENNEDY", "lat": 40.8193127, "lng": 14.1751098, "dimensione": "7x10"}, {"cimasa": "NA40", "indirizzo": "VIALE J.F.KENNEDY ANG.VIA NUOVA AGNANO DIR.AGNANO/BAGNOLI", "lat": 40.819765, "lng": 14.175772, "dimensione": "8x12"}, {"cimasa": "NA84", "indirizzo": "VIA GIUSEPPE ORSI 15 DIR.INC.VIA GIACINTO GIGANTE", "lat": 40.8526786, "lng": 14.2332942, "dimensione": "7x10"}, {"cimasa": "NA85", "indirizzo": "VIA GIUSEPPE ORSI 15 USCITA TANG ARENELLA", "lat": 40.8530371, "lng": 14.2334583, "dimensione": "8x4"}, {"cimasa": "NA82", "indirizzo": "VIA TASSO 114 DIR.VOMERO", "lat": 40.8374037, "lng": 14.2264429, "dimensione": "4x9"}, {"cimasa": "NA95", "indirizzo": "VIA EDGARDO CORTESE ANG.STASI PIAZZA MUZII", "lat": 40.8523986, "lng": 14.2299017, "dimensione": "5x10"}, {"cimasa": "NA70", "indirizzo": "VIA DIOCLEZIANO 567  DIR. CENTRO", "lat": 40.8178021, "lng": 14.1783744, "dimensione": "5x9"}, {"cimasa": "NA71", "indirizzo": "Via ANTONINO PIO dir.Soccavo", "lat": 40.843441, "lng": 14.2019451, "dimensione": "10x0,8"}, {"cimasa": "NA20", "indirizzo": "Via ANTONINO PIO dir.Fuorigrotta", "lat": 40.8438871, "lng": 14.2020504, "dimensione": "10x0,8"}, {"cimasa": "NA73", "indirizzo": "Via SERVIO TULLIO dir.Fuorigrotta", "lat": 40.8444218, "lng": 14.1988655, "dimensione": "10x0,8"}, {"cimasa": "NA74", "indirizzo": "Via SERVIO TULLIO dir. Soccavo", "lat": 40.8439042, "lng": 14.198721, "dimensione": "10x0,8"}, {"cimasa": "NA75", "indirizzo": "Via Emanuele Gianturco dir.Ferraris", "lat": 40.846431, "lng": 14.2873164, "dimensione": "9x1,5"}, {"cimasa": "NA76", "indirizzo": "Via Galileo Ferraris dir.S.Giovanni", "lat": 40.8494763, "lng": 14.2840144, "dimensione": "9x1,5"}];
+var MK=[],map;
+function ico(){return L.divIcon({className:"",html:'<div class="mk"><img src="'+LG+'"></div>',iconSize:[36,36],iconAnchor:[18,36],popupAnchor:[0,-38]});}
+function ph(p){
+  var n="n"+p.cimasa;
+  return '<div class="pm"><div class="ph"><div class="pc">'+p.cimasa+'</div><div class="pd">'+p.dimensione+'</div></div>'
+    +'<div class="pa">'+p.indirizzo+'</div>'
+    +'<img class="pf" src="'+BF+p.cimasa+'.jpg" onerror="this.style.display=\'none\';document.getElementById(\''+n+'\').style.display=\'flex\'">'
+    +'<div id="'+n+'" class="pn" style="display:none">Foto non disponibile</div></div>';
 }
-
-function creaIcona() {
-  return L.divIcon({
-    className: "",
-    html: '<div class="smhub-marker"><img src="' + LOGO + '"></div>',
-    iconSize:[38,38], iconAnchor:[19,38], popupAnchor:[0,-40]
-  });
-}
-
-function renderLista(filtro) {
-  const f = (filtro||"").toLowerCase();
-  const lista = IMPIANTI.filter(i =>
-    i.cimasa.toLowerCase().includes(f) || i.indirizzo.toLowerCase().includes(f));
-  document.getElementById("list-count").textContent = lista.length + " impianti";
-  document.getElementById("list-items").innerHTML = lista.map(function(imp) {
-    return '<div class="imp-item" onclick="focusImpianto('' + imp.cimasa + '')">'
-      + '<div class="imp-cimasa">' + imp.cimasa + '</div>'
-      + '<div class="imp-addr">'  + imp.indirizzo + '</div>'
-      + '<div class="imp-dim">'   + imp.dimensione + '</div>'
-      + '</div>';
+function rl(f){
+  f=(f||"").toLowerCase();
+  var l=IMP.filter(function(i){return i.cimasa.toLowerCase().indexOf(f)>=0||i.indirizzo.toLowerCase().indexOf(f)>=0;});
+  document.getElementById("lcnt").textContent=l.length+" impianti";
+  document.getElementById("li").innerHTML=l.map(function(i){
+    return'<div class="li" onclick="fi(\'"+i.cimasa+"\')"><div class="lc">"+i.cimasa+"</div><div class="la">"+i.indirizzo+"</div><div class="ld">"+i.dimensione+"</div></div>';
   }).join("");
 }
-
-function focusImpianto(cimasa) {
-  const found = markers.find(function(m){return m.data.cimasa===cimasa;});
-  if(found){
-    map.flyTo([found.data.lat,found.data.lng],17,{duration:1});
-    setTimeout(function(){found.marker.openPopup();},900);
-    if(document.getElementById("sidebar").classList.contains("open")) toggleSidebar();
-  }
+function fi(c){
+  var f=MK.filter(function(m){return m.d.cimasa===c;})[0];
+  if(f){map.flyTo([f.d.lat,f.d.lng],17,{duration:1});setTimeout(function(){f.m.openPopup();},900);if(document.getElementById("sb").classList.contains("open"))tgSb();}
 }
-
-function filterList(val){renderLista(val);}
-function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open");}
-
-map = L.map("map").setView([40.845,14.240],12);
+function fl(v){rl(v);}
+function tgSb(){document.getElementById("sb").classList.toggle("open");}
+map=L.map("map").setView([40.845,14.240],12);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
-  attribution:'&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  maxZoom:19
-}).addTo(map);
-
-IMPIANTI.forEach(function(imp){
-  const m = L.marker([imp.lat,imp.lng],{icon:creaIcona()})
-    .bindPopup(popupHtml(imp),{maxWidth:270});
-  m.addTo(map);
-  markers.push({marker:m,data:imp});
+  attribution:"&copy; OpenStreetMap &copy; CARTO",maxZoom:19}).addTo(map);
+IMP.forEach(function(p){
+  var m=L.marker([p.lat,p.lng],{icon:ico()}).bindPopup(ph(p),{maxWidth:260});
+  m.addTo(map);MK.push({m:m,d:p});
 });
-
-document.getElementById("cnt").textContent = IMPIANTI.length;
-renderLista();
+document.getElementById("cnt").textContent=IMP.length;
+rl();
 </script>
 </body>
 </html>
