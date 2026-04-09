@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SM Hub — Maxi Impianti Napoli</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Arial,sans-serif;background:#f0f0f0}
+  #header{background:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.10);position:relative;z-index:1000;height:60px}
+  .header-left{display:flex;align-items:center;gap:12px}
+  #header img{height:36px}
+  #header h1{font-size:15px;font-weight:700;color:#222}
+  #header h1 span{color:#e84c1e}
+  #counter{font-size:12px;background:#fff5f2;border:1px solid #f5c4b3;border-radius:20px;padding:5px 14px;color:#e84c1e;font-weight:700}
+  #map{height:calc(100vh - 60px);width:100%}
+  .popup-box{min-width:240px;font-family:Arial,sans-serif;padding:2px}
+  .popup-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .popup-cimasa{background:#e84c1e;color:#fff;font-size:13px;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:.06em;flex-shrink:0}
+  .popup-dim{font-size:12px;color:#e84c1e;background:#fff5f2;border:1px solid #f5c4b3;padding:3px 8px;border-radius:3px;font-weight:600}
+  .popup-addr{font-size:12px;color:#444;line-height:1.5;border-top:1px solid #f0f0f0;padding-top:8px}
+  .popup-foto{width:100%;height:140px;border-radius:6px;margin-top:8px;object-fit:cover;display:block}
+  .popup-nofoto{width:100%;height:80px;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:11px;margin-top:8px;border:1px dashed #ddd;gap:6px}
+  .smhub-marker{background:#fff;border:2.5px solid #e84c1e;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.25);overflow:hidden}
+  .smhub-marker img{width:28px;height:28px;object-fit:contain}
+  #sidebar{position:fixed;top:60px;left:0;z-index:999;background:#fff;width:290px;height:calc(100vh - 60px);overflow-y:auto;box-shadow:3px 0 12px rgba(0,0,0,.10);transform:translateX(-290px);transition:transform .28s ease}
+  #sidebar.open{transform:translateX(0)}
+  #sidebar-header{padding:12px 16px;background:#fff;border-bottom:2px solid #e84c1e;font-size:13px;font-weight:700;color:#222;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1}
+  #search-box{padding:10px 12px;background:#fafafa;border-bottom:1px solid #eee;position:sticky;top:41px;z-index:1}
+  #search-input{width:100%;border:1px solid #e0e0e0;border-radius:20px;padding:7px 14px;font-size:12px;outline:none;background:#fff}
+  #search-input:focus{border-color:#e84c1e}
+  #list-count{font-size:11px;color:#aaa;padding:6px 16px 2px}
+  .imp-item{padding:10px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s}
+  .imp-item:hover{background:#fff5f2;border-left:3px solid #e84c1e;padding-left:13px}
+  .imp-cimasa{font-size:12px;font-weight:700;color:#e84c1e}
+  .imp-addr{font-size:11px;color:#666;margin-top:2px;line-height:1.35}
+  .imp-dim{font-size:11px;color:#bbb;margin-top:2px}
+  #btn-list{position:fixed;top:72px;left:12px;z-index:1000;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.10);color:#333;display:flex;align-items:center;gap:6px}
+  #btn-list:hover{background:#f5f5f5}
+  #btn-close-sidebar{background:none;border:none;font-size:16px;cursor:pointer;color:#aaa}
+  #btn-close-sidebar:hover{color:#e84c1e}
+  .leaflet-popup-content-wrapper{border-radius:10px!important;box-shadow:0 4px 16px rgba(0,0,0,.15)!important}
+  .leaflet-popup-content{margin:14px 16px!important}
+  #loading{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:14px}
+  #loading p{font-size:13px;color:#999}
+  .spinner{width:30px;height:30px;border:3px solid #f5c4b3;border-top-color:#e84c1e;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABAAEADASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAgFBgcJAwT/xAAxEAABAwMDAwIGAQMFAAAAAAABAgMEBQYRAAchCBITMUEUIjJRYXEVI0KRFiQzQ4H/xAAaAQADAAMBAAAAAAAAAAAAAAAABAUCAwYH/8QALBEAAQIFAgQFBQEAAAAAAAAAAQIDAAQRITEFQQYTUWEScZGx8BQiUoHRI//aAAwDAQACEQMRAD8ATLRo1vWxm0NIrFvsXPdDbstEpSjDgpWUIKEnHesjk5IOEgjgZOc41O1TVGNMY5z5tgAZJ6CG5KSdnXeW1n2jBdGm6ZtLZuryV0iJBtp+UklCmY00h4EcEDC8k/rOq1Sdq7Bh7qyqGW3amz/EmW5AkLVmGvyoCf6iSCcgn5SMgcknI1Bb4ylFBXjaWkgVoQLj196DvFRfDz4KfCtJBNM7wtWjTHb1bR0JqznKvaNKEOXTsuyGW3Fr87P9x+YnlP1ce3d+NZ5sDYLd43I5MqrCl0SnAKkDJSH3D9DQI/ycew/I1Ql+I5N+RXOgkJTkGla7DO+14Ue0iYamUyxuTg7fBvGaaNMpvbt7ZVC2yqdVo9AZiTWXGA28l5xRSFOpB4KiPQkaWvTWkau1qrBeaBABpenQHYnrGnUJByRdDbhBJFbfO0Gmi6ftwaBMs6nW3MqEeBVqeksobkLCEyEdxKShR4J5wU+vGRpXdM3R9tbM3B22oE9p1Maps05lh+bAKVEOJSAUPI9CofnCvTkjGo/F/wBIqWQiaqElVlC/hNDkbg+vSH9AL6XlKYoSBg7j+xKXLsXZdTdXLhCoUV5xRWFRnAtruPOQlXtn2Ch+NfFtXZFwWfulVH6xPVVmJ9MUWakSol1QcbylfcSQsAZwSePQn299t9ra/ZtxMTE3y7JpbeQ5AQ0tKXwQQElJUUjnBzyeONaGuqQv9TN0AP8AdUExFzHGU/8AW1lKQVfYkngfs64Oa1OZQlcq2/z2ynJBqPW4wNyP3HUy8kypSX1tcpYOKi/pbfzjz/nYSLvTbDmUznIHxzXd9DzfcUqSPyMZI9wT9jqLeNu7cWmEQ4ojxHJoQzHSodz77y8YBP2H+Eo1kXUxVp1C3OtusU14szIkBLrS/wAh1fB+4PoR7gnURcN5SNyb2hVRQcpVuW+0iY+FfMGyCkrP2Uta8IQPtj86p6Vwm/PhgtH/ADcFVX3TX367fcYn6lxCzIh1To+5BoLVsaY79tzQRonVBXoUCxXbeW4FTJ7yOxA9e1tYUVH8cAfs/vSt6nr+uebd90zK5N+UvLIaazkNN5PagfrP/pJOoHXpOnaaxpssmWZvTJ/JW5/nQACONenH51xT7+VYH4jZP63O5qcGkGnou2xobvSZbF5WrSJDN9N0SlNQ5dK725MkuKYQULS3/wA3yk/UDjGRjSL66NTLwq1h9D9GumhFpNSh25Tkx1OoC0oU54W+7B4JAWSAeMgZ02tCVpKVCoMYJUUmoNDCwbj07qVsW201a611WFS1lKFyWX47viKuAFqaJUjJwMnAyQM51V69Ze9G2lPXe1ViVOjMTyhldQ+OacW8XB3pB7VqUc9ueR7c6cJm6qluH0N1i5rjSw9UJVvzy+pDYSla2VOpSvtHAP8ATSrjjPpjUR1vMvvdLdIdbbW4lqZAcdUkZCElpacn7DuUkfsjSyNPlG0lKGkgHNAL+do3Kmn1kFSySO5hTrysPeCqWZG3EuimzpdD+FZWzUX5bSwGXVgN/KF9wBUscY/u51p927D3LTNlLTodApEyoXNX6qqRKZZV2p8SWSU95OEpSCeCogcj3Otrv6M9G6DqRFmR1tOoplDS406jCk/7qLkEH0/R1O9aG4V6bc7bwKlZZEV6VPSxIn/Dpd+GR2kgBKgUgqIxkg+hHqQQ8wUsNFttNK2tag3A8/mYSfaL7qVuGtL06nYnyvTvfIEIhuXtVf23BYN425IpzMhXazIC0OsrVjPb5GyUhWAT2kg4BONUrXQ+rVaobk9DdSr99Qmm6g9RJEvu8YQFuMqUWXkp/tK+xCuOD3ccEa54awjdBpgbr6i2K505sbSJtJxhxqnw4f8AImeFA+Bbau7x+MfV4/Tu4z76X7RoghgLT6i2KH05yNpFWk4+49T5kP8AkRPCQPOpxXd4/Gfp8np3c49tXawOsp+h7fQ6HXLOVVKrAipjNSkTA23ICE9qVOJKSUnAGcZycnjOApOjRBDNbkdVz987TP2dU7QDVRkmKt+e1Nw2VtSG3iUtdmQD48Adxxn1OObVVOtr4uXDQjbpo07vUJ8d+oB1TyCPl7D4wEkKweQoEcceoTvRoghjeojqhqG5NqKtGgUJVBo76kmYtx/yPSEpIIbGAAhGQCfUnA5AyCuWjRogj//Z" style="height:40px">
+  <div class="spinner"></div>
+  <p>Caricamento impianti...</p>
+</div>
+
+<div id="header">
+  <div class="header-left">
+    <img src="data:image/png;base64,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" alt="SM Hub">
+    <h1>Maxi Impianti — <span>Napoli</span></h1>
+  </div>
+  <div id="counter"><span id="cnt">—</span> impianti</div>
+</div>
+
+<div id="map"></div>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    Tutti gli impianti
+    <button id="btn-close-sidebar" onclick="toggleSidebar()">✕</button>
+  </div>
+  <div id="search-box">
+    <input id="search-input" type="text" placeholder="Cerca cimasa o indirizzo…" oninput="filterList(this.value)">
+  </div>
+  <div id="list-count"></div>
+  <div id="list-items"></div>
+</div>
+
+<button id="btn-list" onclick="toggleSidebar()">☰&nbsp; Lista impianti</button>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const LOGO = "data:image/png;base64,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";
+const BASE = location.href.replace(/\/[^\/]*$/, "");
+let IMPIANTI = [], markers = [], map;
+
+function fotoUrl(cimasa) {
+  return BASE + "/img/foto/" + cimasa + ".jpg";
+}
+
+function popupHtml(imp) {
+  const nid = "nd-" + imp.cimasa;
+  const fid = "fi-" + imp.cimasa;
+  return '<div class="popup-box">'
+    + '<div class="popup-header">'
+    + '<div class="popup-cimasa">' + imp.cimasa + '</div>'
+    + '<div class="popup-dim">&#128210; ' + imp.dimensione + '</div>'
+    + '</div>'
+    + '<div class="popup-addr">' + imp.indirizzo + '</div>'
+    + '<img id="' + fid + '" class="popup-foto" src="' + fotoUrl(imp.cimasa) + '"'
+    + ' onerror="this.style.display='none';document.getElementById('' + nid + '').style.display='flex'">'
+    + '<div id="' + nid + '" class="popup-nofoto" style="display:none">&#128247; Foto non disponibile</div>'
+    + '</div>';
+}
+
+function creaIcona() {
+  return L.divIcon({
+    className: "",
+    html: '<div class="smhub-marker"><img src="' + LOGO + '"></div>',
+    iconSize: [38,38], iconAnchor: [19,38], popupAnchor: [0,-40]
+  });
+}
+
+function aggiungiMarker(imp) {
+  const m = L.marker([imp.lat, imp.lng], {icon: creaIcona()})
+    .bindPopup(popupHtml(imp), {maxWidth: 270});
+  m.addTo(map);
+  markers.push({marker: m, data: imp});
+}
+
+function renderLista(filtro) {
+  const container = document.getElementById("list-items");
+  const countEl   = document.getElementById("list-count");
+  const f = (filtro || "").toLowerCase();
+  const lista = IMPIANTI.filter(i =>
+    i.cimasa.toLowerCase().includes(f) || i.indirizzo.toLowerCase().includes(f));
+  countEl.textContent = lista.length + " impianti";
+  container.innerHTML = lista.map(function(imp) {
+    return '<div class="imp-item" onclick="focusImpianto('' + imp.cimasa + '')">'
+      + '<div class="imp-cimasa">' + imp.cimasa + '</div>'
+      + '<div class="imp-addr">'  + imp.indirizzo + '</div>'
+      + '<div class="imp-dim">'   + imp.dimensione + '</div>'
+      + '</div>';
+  }).join("");
+}
+
+function focusImpianto(cimasa) {
+  const found = markers.find(function(m) { return m.data.cimasa === cimasa; });
+  if (found) {
+    map.flyTo([found.data.lat, found.data.lng], 17, {duration: 1});
+    setTimeout(function() { found.marker.openPopup(); }, 900);
+    if (document.getElementById("sidebar").classList.contains("open")) toggleSidebar();
+  }
+}
+
+function filterList(val) { renderLista(val); }
+function toggleSidebar() { document.getElementById("sidebar").classList.toggle("open"); }
+
+map = L.map("map", {zoomControl: true}).setView([40.845, 14.240], 12);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  maxZoom: 19
+}).addTo(map);
+
+fetch(BASE + "/data/impianti.json")
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    IMPIANTI = data;
+    IMPIANTI.forEach(aggiungiMarker);
+    document.getElementById("cnt").textContent = IMPIANTI.length;
+    renderLista();
+    document.getElementById("loading").style.display = "none";
+  })
+  .catch(function() {
+    document.getElementById("loading").innerHTML = "<p style='color:#e84c1e'>Errore caricamento dati. Verifica la connessione.</p>";
+  });
+</script>
+</body>
+</html>

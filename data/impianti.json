@@ -1,0 +1,247 @@
+[
+  {
+    "cimasa": "N/D",
+    "indirizzo": "VIA TASSO 114 DIR.VOMERO",
+    "lat": 40.8374037,
+    "lng": 14.2264429,
+    "dimensione": "10x12"
+  },
+  {
+    "cimasa": "NA04",
+    "indirizzo": "STAZIONE EAV P.ZZA GARIBALDI banchina treni binario 4",
+    "lat": 40.8529176,
+    "lng": 14.272529,
+    "dimensione": "12x3"
+  },
+  {
+    "cimasa": "NA05",
+    "indirizzo": "STAZIONE EAV P.ZZA GARIBALDI banchina treni binario 1",
+    "lat": 40.8530043,
+    "lng": 14.2730587,
+    "dimensione": "12x3"
+  },
+  {
+    "cimasa": "NA63",
+    "indirizzo": "VIA MARINA DIREZIONE CENTRO- REGGIA DI PORTICI ANG.GIANTURCO",
+    "lat": 40.8434707,
+    "lng": 14.285129,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA65",
+    "indirizzo": "VIA MARINA ALTEZZA INGRESSO AUTOSTRADE",
+    "lat": 40.8432079,
+    "lng": 14.2857851,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA64",
+    "indirizzo": "VIA PIETRO J.DE GENNARO DIR.VIA LEPANTO STADIO MARADONA",
+    "lat": 40.8288336,
+    "lng": 14.1962536,
+    "dimensione": "6x6"
+  },
+  {
+    "cimasa": "NA66",
+    "indirizzo": "CORSO ARNALDO LUCCI DIREZ.PIAZZA GARIBALDI",
+    "lat": 40.8479045,
+    "lng": 14.2763135,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA68",
+    "indirizzo": "VIA LUIGI VOLPICELLA 413 dir CERCOLA e Paesi Vesuviani",
+    "lat": 40.8483073,
+    "lng": 14.3235664,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA69",
+    "indirizzo": "VIA EPOMEO  ROTATORIA DIR.SOCCAVO",
+    "lat": 40.8476009,
+    "lng": 14.1913539,
+    "dimensione": "4x9"
+  },
+  {
+    "cimasa": "NA67",
+    "indirizzo": "VIA TERRACINA stadio Maradona  alt incr  BARBAGALLO dir. AGNANO",
+    "lat": 40.8238497,
+    "lng": 14.1774396,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA72",
+    "indirizzo": "VIA PIETRO JACOPO DE GENNARO  ALT.INCR.VIA CARITEO stadio Maradona",
+    "lat": 40.8285001,
+    "lng": 14.1973064,
+    "dimensione": "7x7"
+  },
+  {
+    "cimasa": "NA80",
+    "indirizzo": "VIA DIOCLEZIANO ALT.INC.PIAZZALE TECCHIO DIR.CENTRO",
+    "lat": 40.8227712,
+    "lng": 14.1930718,
+    "dimensione": "5x10"
+  },
+  {
+    "cimasa": "NA81",
+    "indirizzo": "VIALE JF KENNEDY 425  DIR. CENTRO PALAPARTENOPE MOSTRA",
+    "lat": 40.819075,
+    "lng": 14.177719,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA83",
+    "indirizzo": "VIA GABRIELE JANNELLI 304 A MT.80 INC.VIA FRAGNITO",
+    "lat": 40.8590047,
+    "lng": 14.2166811,
+    "dimensione": "8x6"
+  },
+  {
+    "cimasa": "NA86",
+    "indirizzo": "VIA DI MIANO 167 ALT.INC.DON LUIGI GUANELLA",
+    "lat": 40.8900494,
+    "lng": 14.2517168,
+    "dimensione": "5x10"
+  },
+  {
+    "cimasa": "NA88",
+    "indirizzo": "VIA LEPANTO 33 ANG.VIA VENIERO FUORIGROTTA STADIO",
+    "lat": 40.8273596,
+    "lng": 14.1986482,
+    "dimensione": "5x10"
+  },
+  {
+    "cimasa": "NA90",
+    "indirizzo": "VIA EMILIO SCAGLIONE 188",
+    "lat": 40.8829448,
+    "lng": 14.2310994,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA89",
+    "indirizzo": "VIA FORIA 106",
+    "lat": 40.8576935,
+    "lng": 14.2597536,
+    "dimensione": "5x8"
+  },
+  {
+    "cimasa": "NA87",
+    "indirizzo": "VIA SANTA MARIA A CUBITO 530",
+    "lat": 40.8909184,
+    "lng": 14.2226047,
+    "dimensione": "8x12"
+  },
+  {
+    "cimasa": "NA92",
+    "indirizzo": "VIALE DELLA LIBERAZIONE 73 DIR.BAGNOLI",
+    "lat": 40.8206792,
+    "lng": 14.1708516,
+    "dimensione": "7x9"
+  },
+  {
+    "cimasa": "NA93",
+    "indirizzo": "VIA STADERA 138 DIR.CENTRO",
+    "lat": 40.8749357,
+    "lng": 14.3059782,
+    "dimensione": "6x6"
+  },
+  {
+    "cimasa": "NA91",
+    "indirizzo": "VIA EMANUELE GIANTURCO 55 A 50 MT ROTATORIA VIA FERRARIS",
+    "lat": 40.8484328,
+    "lng": 14.2885877,
+    "dimensione": "6x8"
+  },
+  {
+    "cimasa": "NA30",
+    "indirizzo": "VIA NUOVA AGNANO ANGOLO VIALE KENNEDY",
+    "lat": 40.8193127,
+    "lng": 14.1751098,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA40",
+    "indirizzo": "VIALE J.F.KENNEDY ANG.VIA NUOVA AGNANO DIR.AGNANO/BAGNOLI",
+    "lat": 40.819765,
+    "lng": 14.175772,
+    "dimensione": "8x12"
+  },
+  {
+    "cimasa": "NA84",
+    "indirizzo": "VIA GIUSEPPE ORSI 15 DIR.INC.VIA GIACINTO GIGANTE",
+    "lat": 40.8526786,
+    "lng": 14.2332942,
+    "dimensione": "7x10"
+  },
+  {
+    "cimasa": "NA85",
+    "indirizzo": "VIA GIUSEPPE ORSI 15 USCITA TANG ARENELLA",
+    "lat": 40.8530371,
+    "lng": 14.2334583,
+    "dimensione": "8x4"
+  },
+  {
+    "cimasa": "NA82",
+    "indirizzo": "VIA TASSO 114 DIR.VOMERO",
+    "lat": 40.8374037,
+    "lng": 14.2264429,
+    "dimensione": "4x9"
+  },
+  {
+    "cimasa": "NA95",
+    "indirizzo": "VIA EDGARDO CORTESE ANG.STASI PIAZZA MUZII",
+    "lat": 40.8523986,
+    "lng": 14.2299017,
+    "dimensione": "5x10"
+  },
+  {
+    "cimasa": "NA70",
+    "indirizzo": "VIA DIOCLEZIANO 567  DIR. CENTRO",
+    "lat": 40.8178021,
+    "lng": 14.1783744,
+    "dimensione": "5x9"
+  },
+  {
+    "cimasa": "NA71",
+    "indirizzo": "Via ANTONINO PIO dir.Soccavo",
+    "lat": 40.843441,
+    "lng": 14.2019451,
+    "dimensione": "10x0,8"
+  },
+  {
+    "cimasa": "NA20",
+    "indirizzo": "Via ANTONINO PIO dir.Fuorigrotta",
+    "lat": 40.8438871,
+    "lng": 14.2020504,
+    "dimensione": "10x0,8"
+  },
+  {
+    "cimasa": "NA73",
+    "indirizzo": "Via SERVIO TULLIO dir.Fuorigrotta",
+    "lat": 40.8444218,
+    "lng": 14.1988655,
+    "dimensione": "10x0,8"
+  },
+  {
+    "cimasa": "NA74",
+    "indirizzo": "Via SERVIO TULLIO dir. Soccavo",
+    "lat": 40.8439042,
+    "lng": 14.198721,
+    "dimensione": "10x0,8"
+  },
+  {
+    "cimasa": "NA75",
+    "indirizzo": "Via Emanuele Gianturco dir.Ferraris",
+    "lat": 40.846431,
+    "lng": 14.2873164,
+    "dimensione": "9x1,5"
+  },
+  {
+    "cimasa": "NA76",
+    "indirizzo": "Via Galileo Ferraris dir.S.Giovanni",
+    "lat": 40.8494763,
+    "lng": 14.2840144,
+    "dimensione": "9x1,5"
+  }
+]
